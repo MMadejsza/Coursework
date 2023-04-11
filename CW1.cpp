@@ -25,11 +25,13 @@ string validation(string typo, string msg)
         errorMsg = "Please input the date in correct format.";
     }
     else if (typo == "postcode")
+    // just format XXX(X)-XXX
     {
         regCondition = "[a-zA-Z0-9]{3,4} [a-zA-Z0-9]{3}";
-        errorMsg = "Please input the postcode in correct format.";
+        errorMsg = "Please input the postcode in correct format. XXX(X)-XXX";
     }
     else if (typo == "card")
+    // 16 digits
     {
         regCondition = "[0-9]{16}";
         errorMsg = "Card number must contain 16 digits.";
