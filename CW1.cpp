@@ -4,6 +4,7 @@
 #include <limits>
 using namespace std;
 
+// function validating integer expected and according message:
 int productQty(string msg)
 {
     // declaring the variables:
@@ -33,6 +34,7 @@ int productQty(string msg)
     return stoi(datum);
 }
 
+// function grouping product data related inputs
 void productsForm()
 {
     int beans = productQty("Enter Baked Beans units to buy.");
