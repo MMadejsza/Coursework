@@ -65,7 +65,7 @@ string validation(string typo, string msg)
     return datum;
 };
 
-void inputForm()
+void customerInputForm()
 {
     string name = validation("name", "Enter a name (No special characters or numbers): ");
     string address = validation("none", "Enter 1st line of the address");
@@ -84,5 +84,5 @@ void inputForm()
 
 int main()
 {
-    inputForm();
+    customerInputForm();
 }
