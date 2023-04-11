@@ -33,6 +33,18 @@ int productQty(string msg)
     return stoi(datum);
 }
 
+void productsForm()
+{
+    int beans = productQty("Enter Baked Beans units to buy.");
+    int popcorn = productQty("Enter Popcorn units to buy.");
+    int milk = productQty("Enter Evaporated Milk units to buy.");
+    int bread = productQty("Enter Bread units to buy.");
+    cout << endl
+         << "beans " << beans << endl
+         << "popcorn " << popcorn << endl
+         << "milk " << milk << endl
+         << "bread " << bread << endl;
+}
 // function validating expected input type "typo" and according message:
 string validation(string typo, string msg)
 {
@@ -104,7 +116,8 @@ void customerInputForm()
     string expiryDate = validation("date", "Enter the expiry date (DD/MM/YY format) ");
     string secretCode = validation("none", "Enter your secret code");
 
-    cout << "name " << name << endl
+    cout << endl
+         << "name " << name << endl
          << "address " << address << endl
          << "postcode " << postcode << endl
          << "cardNumber " << cardNumber << endl
@@ -114,14 +127,6 @@ void customerInputForm()
 
 int main()
 {
-    // customerInputForm();
-    int beans = productQty("Enter Baked Beans units to buy.");
-    int popcorn = productQty("Enter Popcorn units to buy.");
-    int milk = productQty("Enter Evaporated Milk units to buy.");
-    int bread = productQty("Enter Bread units to buy.");
-    cout << endl
-         << "beans " << beans << endl
-         << "popcorn " << popcorn << endl
-         << "milk " << milk << endl
-         << "bread " << bread << endl;
+    customerInputForm();
+    productsForm();
 }
