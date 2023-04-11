@@ -4,6 +4,35 @@
 #include <limits>
 using namespace std;
 
+int productQty(string msg)
+{
+    // declaring the variables:
+    string datum;
+    string errorMsg = "Please input valid number. Our stocks are limited to 15 units";
+    string regCondition = "[0-9]+";
+    // instantiate regex:
+    regex reg(regCondition);
+    // print instruction for user what's expected from function
+    cout << msg << endl;
+    // as long as input doesn't meet expectations:
+    do
+    {
+        // error message in "if" for first iteration:
+        if (!regex_match(datum, reg) && datum != "")
+        {
+            cout << errorMsg << endl;
+        }
+
+        // clean the buffer
+        cin.clear();
+        // request the input to "datum" again
+        getline(cin >> ws, datum);
+    } while (!regex_match(datum, reg));
+
+    // transform string input to integer
+    return stoi(datum);
+}
+
 // function validating expected input type "typo" and according message:
 string validation(string typo, string msg)
 {
@@ -84,5 +113,14 @@ void customerInputForm()
 
 int main()
 {
-    customerInputForm();
+    // customerInputForm();
+    int beans = productQty("Enter Baked Beans units to buy.");
+    int popcorn = productQty("Enter Popcorn units to buy.");
+    int milk = productQty("Enter Evaporated Milk units to buy.");
+    int bread = productQty("Enter Bread units to buy.");
+    cout << endl
+         << beans << endl
+         << popcorn << endl
+         << milk << endl
+         << bread << endl;
 }
