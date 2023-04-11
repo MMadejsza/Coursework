@@ -15,22 +15,24 @@ string validation(string typo, string msg)
     // specify validation rules in regex based on given argument "typo"
     if (typo == "name")
     {
-        regCondition = "[A-Z]*[a-z]*";
-        errorMsg = "Please input the name starting from capital letters, no numbers or special characters.";
+        regCondition = "[A-Za-z]+";
+        errorMsg = "Please input the name - at least 1 letter - no numbers or special characters.";
     }
-    // 2 digits 0-9 per slash -> validates only format, not if date is out of range
+    // regex simplified: 2 digits 0-9 per slash -> validates only format, not if date is out of range
     else if (typo == "date")
     {
         regCondition = "[0-9]{2}/[0-9]{2}/[0-9]{2}";
-        errorMsg = "Please input the date in correct format";
+        errorMsg = "Please input the date in correct format.";
     }
     else if (typo == "postcode")
     {
-        regCondition = "[A-Z]*[a-z]*";
+        regCondition = "[a-zA-Z0-9]{3,4} [a-zA-Z0-9]{3}";
+        errorMsg = "Please input the postcode in correct format.";
     }
     else if (typo == "card")
     {
-        regCondition = "[A-Z]*[a-z]*";
+        regCondition = "[0-9]{16}";
+        errorMsg = "Card number must contain 16 digits.";
     };
 
     if (typo != "none")
@@ -40,20 +42,20 @@ string validation(string typo, string msg)
         // print instruction for user what's expected from function
         cout << msg << endl;
         // request the input to "datum"
-        cin >> datum;
+        // cin >> datum;
         // as long as input doesn't meet expectations:
-        while (!regex_match(datum, reg))
+        do
         {
             // error message in "if" for first iteration:
-            if (!regex_match(datum, reg))
+            if (!regex_match(datum, reg) && datum != "")
             {
                 cout << errorMsg << endl;
             }
             // clean the buffer
             cin.clear();
             // request the input to "datum" again
-            cin >> datum;
-        };
+            getline(cin >> ws, datum);
+        } while (!regex_match(datum, reg));
         return datum;
     }
 
@@ -67,8 +69,8 @@ void inputForm()
 {
     string name = validation("name", "Enter a name (No special characters or numbers): ");
     string address = validation("none", "Enter 1st line of the address");
-    string postcode = validation("none", "Enter postcode");
-    string cardNumber = validation("none", "Enter 16-digit card number");
+    string postcode = validation("postcode", "Enter postcode in format (XXX(x) XXX)");
+    string cardNumber = validation("card", "Enter 16-digit card number");
     string expiryDate = validation("date", "Enter the expiry date (DD/MM/YY format) ");
     string secretCode = validation("none", "Enter your secret code");
 
