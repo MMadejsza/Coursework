@@ -63,16 +63,6 @@ string validation(string typo, string msg)
     return datum;
 };
 
-// string simpleInput(string text)
-// {
-//     string data;
-//     // print instruction for user what's expected from function
-//     cout << "Enter " << text << endl;
-//     // request the input allowing whitespaces
-//     getline(cin >> ws, data);
-//     return data;
-// };
-
 void inputForm()
 {
     string name = validation("name", "Enter a name (No special characters or numbers): ");
