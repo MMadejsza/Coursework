@@ -4,6 +4,28 @@
 #include <limits>
 using namespace std;
 
+// start here - drop cart attribute and start other classes - carry on. later on you'll assign cart to attribute;
+class Customer
+{
+public:
+    string name;
+    string address;
+    string postcode;
+    string carNumber;
+    string expiryDate;
+    string securityMsg;
+    auto cart;
+    Customer(string n, string a, string p, string c, string ex, string sec)
+    {
+        name = n;
+        address = a;
+        postcode = p;
+        carNumber = c;
+        expiryDate = ex;
+        securityMsg = sec;
+    };
+};
+
 // function validating integer expected and according message:
 int productQty(string msg)
 {
