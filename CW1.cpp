@@ -94,6 +94,7 @@ string validation(string typo, string msg)
     return datum;
 };
 
+// function grouping customer data related inputs
 void customerInputForm()
 {
     string name = validation("name", "Enter a name (No special characters or numbers): ");
@@ -103,12 +104,12 @@ void customerInputForm()
     string expiryDate = validation("date", "Enter the expiry date (DD/MM/YY format) ");
     string secretCode = validation("none", "Enter your secret code");
 
-    cout << name << endl
-         << address << endl
-         << postcode << endl
-         << cardNumber << endl
-         << expiryDate << endl
-         << secretCode << endl;
+    cout << "name " << name << endl
+         << "address " << address << endl
+         << "postcode " << postcode << endl
+         << "cardNumber " << cardNumber << endl
+         << "expiryDate " << expiryDate << endl
+         << "secretCode " << secretCode << endl;
 };
 
 int main()
@@ -119,8 +120,8 @@ int main()
     int milk = productQty("Enter Evaporated Milk units to buy.");
     int bread = productQty("Enter Bread units to buy.");
     cout << endl
-         << beans << endl
-         << popcorn << endl
-         << milk << endl
-         << bread << endl;
+         << "beans " << beans << endl
+         << "popcorn " << popcorn << endl
+         << "milk " << milk << endl
+         << "bread " << bread << endl;
 }
