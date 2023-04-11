@@ -27,13 +27,13 @@ string validation(string typo, string msg)
     else if (typo == "postcode")
     // just format XXX(X)-XXX
     {
-        regCondition = "[a-zA-Z0-9]{3,4} [a-zA-Z0-9]{3}";
+        regCondition = "([a-zA-Z0-9]{3,4} [a-zA-Z0-9]{3})|([a-zA-Z0-9]{3,4}[a-zA-Z0-9]{3})";
         errorMsg = "Please input the postcode in correct format. XXX(X)-XXX";
     }
     else if (typo == "card")
     // 16 digits
     {
-        regCondition = "[0-9]{16}";
+        regCondition = "([0-9]{16})|([0-9]{4} [0-9]{4} [0-9]{4} [0-9]{4})";
         errorMsg = "Card number must contain 16 digits.";
     };
 
@@ -43,8 +43,6 @@ string validation(string typo, string msg)
         regex reg(regCondition);
         // print instruction for user what's expected from function
         cout << msg << endl;
-        // request the input to "datum"
-        // cin >> datum;
         // as long as input doesn't meet expectations:
         do
         {
