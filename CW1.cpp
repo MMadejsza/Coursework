@@ -4,77 +4,83 @@
 #include <limits>
 using namespace std;
 
-// function validating name:
-string validation(string typo)
+// function validating expected input type "typo" and according message:
+string validation(string typo, string msg)
 {
+    // declaring the variables:
+    string datum;
+    string regCondition;
+    string errorMsg;
+
+    // specify validation rules in regex based on given argument "typo"
     if (typo == "name")
     {
-        // declare the name
-        string name;
-        // specify validation rules in regex
-        regex reg("[A-Z]*[a-z]*");
-        // print instruction for user what's expected
-        cout << "Enter a name (No special characters or numbers): " << endl;
-        // request the input to "name" again
-        cin >> name;
-        // as long as input doesn't meet expectations:
-        while (!regex_match(name, reg))
-        {
-            // error message in "if" for first iteration:
-            if (!regex_match(name, reg))
-            {
-                cout << "Please input the name starting from capital letters, no numbers or special characters." << endl;
-            }
-            // clean the buffer
-            cin.clear();
-            // request the input to "name" again
-            cin >> name;
-        };
-        return name;
+        regCondition = "[A-Z]*[a-z]*";
+        errorMsg = "Please input the name starting from capital letters, no numbers or special characters.";
     }
-    if (typo == "date")
+    // 2 digits 0-9 per slash -> validates only format, not if date is out of range
+    else if (typo == "date")
     {
-        // declare the date
-        string date;
-        // specify validation rules in regex
-        regex reg("[0-9]{2}/[0-9]{2}/[0-9]{2}");
-        // print instruction for user what's expected
-        cout << "Enter the expiry date (DD/MM/YY format) " << endl;
+        regCondition = "[0-9]{2}/[0-9]{2}/[0-9]{2}";
+        errorMsg = "Please input the date in correct format";
+    }
+    else if (typo == "postcode")
+    {
+        regCondition = "[A-Z]*[a-z]*";
+    }
+    else if (typo == "card")
+    {
+        regCondition = "[A-Z]*[a-z]*";
+    };
+
+    if (typo != "simple")
+    {
+        // instantiate regex
+        regex reg(regCondition);
+        // print instruction for user what's expected from function
+        cout << msg << endl;
+        // request the input to "datum"
+        cin >> datum;
         // as long as input doesn't meet expectations:
-        while (!regex_match(date, reg))
+        while (!regex_match(datum, reg))
         {
+            // error message in "if" for first iteration:
+            if (!regex_match(datum, reg))
+            {
+                cout << errorMsg << endl;
+            }
             // clean the buffer
             cin.clear();
-            // request the input to "name" again
-            cin >> date;
-            // error message in "if" for first iteration:
-            if (!regex_match(date, reg))
-            {
-                cout << "Please input the date in correct format" << endl;
-            }
+            // request the input to "datum" again
+            cin >> datum;
         };
-        return date;
+        return datum;
     }
+
+    cout << msg << endl;
+    // request the input allowing whitespaces
+    getline(cin >> ws, datum);
+    return datum;
 };
 
-string simpleInput(string text)
-{
-    string data;
-    // print instruction for user what's expected from function
-    cout << "Enter " << text << endl;
-    // request the input allowing whitespaces
-    getline(cin >> ws, data);
-    return data;
-};
+// string simpleInput(string text)
+// {
+//     string data;
+//     // print instruction for user what's expected from function
+//     cout << "Enter " << text << endl;
+//     // request the input allowing whitespaces
+//     getline(cin >> ws, data);
+//     return data;
+// };
 
 void inputForm()
 {
-    string name = validation("name");
-    string address = simpleInput("Enter 1st line of the address");
-    string postcode = simpleInput("Enter postcode");
-    string cardNumber = simpleInput("Enter 16-digit card number");
-    string expiryDate = validation("date");
-    string secretCode = simpleInput("Enter your secret code");
+    string name = validation("name", "Enter a name (No special characters or numbers): ");
+    string address = validation("simple", "Enter 1st line of the address");
+    string postcode = validation("simple", "Enter postcode");
+    string cardNumber = validation("simple", "Enter 16-digit card number");
+    string expiryDate = validation("date", "Enter the expiry date (DD/MM/YY format) ");
+    string secretCode = validation("simple", "Enter your secret code");
 
     cout << name << endl
          << address << endl
