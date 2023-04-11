@@ -33,7 +33,7 @@ string validation(string typo, string msg)
         regCondition = "[A-Z]*[a-z]*";
     };
 
-    if (typo != "simple")
+    if (typo != "none")
     {
         // instantiate regex
         regex reg(regCondition);
@@ -66,11 +66,11 @@ string validation(string typo, string msg)
 void inputForm()
 {
     string name = validation("name", "Enter a name (No special characters or numbers): ");
-    string address = validation("simple", "Enter 1st line of the address");
-    string postcode = validation("simple", "Enter postcode");
-    string cardNumber = validation("simple", "Enter 16-digit card number");
+    string address = validation("none", "Enter 1st line of the address");
+    string postcode = validation("none", "Enter postcode");
+    string cardNumber = validation("none", "Enter 16-digit card number");
     string expiryDate = validation("date", "Enter the expiry date (DD/MM/YY format) ");
-    string secretCode = validation("simple", "Enter your secret code");
+    string secretCode = validation("none", "Enter your secret code");
 
     cout << name << endl
          << address << endl
