@@ -133,10 +133,15 @@ int productQty(string msg)
 // function grouping product data related inputs
 auto productsForm(auto Customer)
 {
-    int beans = productQty("Enter Baked Beans units to buy.");
-    int popcorn = productQty("Enter Popcorn units to buy.");
-    int milk = productQty("Enter Evaporated Milk units to buy.");
-    int bread = productQty("Enter Bread units to buy.");
+    // int beans = productQty("Enter Baked Beans units to buy.");
+    // int popcorn = productQty("Enter Popcorn units to buy.");
+    // int milk = productQty("Enter Evaporated Milk units to buy.");
+    // int bread = productQty("Enter Bread units to buy.");
+
+    int beans = 2;
+    int popcorn = 2;
+    int milk = 2;
+    int bread = 2;
 
     // instantiate objects for each product:
     Product Beans("Baked Beans", 1.20, beans);
