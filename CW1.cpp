@@ -3,7 +3,6 @@
 #include <regex>
 #include <vector>
 #include <cmath>
-#include <limits>
 using namespace std;
 
 // creating Product class / template to store collected data
