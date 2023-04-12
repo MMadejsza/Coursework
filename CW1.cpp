@@ -13,6 +13,7 @@ public:
     string name;
     float price;
     int quantity;
+    float totalNet;
 
     // constructor - "creation template"
     Product(string n, float p, int q)
@@ -30,26 +31,27 @@ class Cart
 public:
     string owner;
     vector<Product> products;
-    float netCost; // = calcNet();
+    float netCost;
     float vatValue = 0.2;
     float VAT = calcVat();
 
     float grossCost = calcGross();
 
     // methods:
-    float calcNet()
+    // net calculations:
+    void calcNet()
     {
+        // initial value:
         float cartNetValue = 0;
         for (int i = 0; i < products.size(); i++)
         {
+            // calculate each product price:
             float productValue = products[i].price * float(products[i].quantity);
-            // Tracing
-            // cout << endl
-            //      << products[i].name << "cena: " << products[i].price << "ilosc: " << products[i].quantity << "Net product: " << productValue << endl;
-            // cartNetValue += productValue;
+            // store it in product object:
+            products[i].totalNet = productValue;
+            cartNetValue += productValue;
         };
         netCost = cartNetValue;
-        return cartNetValue;
     };
 
     float calcVat()
@@ -250,6 +252,13 @@ int main()
     auto Customer1 = customerInputForm();
     // productsForm returning Cart object signed by Customer;
     auto Cart1 = productsForm(Customer1);
+    cout << endl
+         << "cart netCost " << Cart1.netCost << endl;
+    for (int i = 0; i < Cart1.products.size(); i++)
+    {
+        cout << endl
+             << Cart1.products[i].name << " " << Cart1.products[i].totalNet << endl;
+    }
 }
 // ? Resources:
 // ? https://developer.mozilla.org/en-US/
