@@ -2,6 +2,7 @@
 #include <string>
 #include <regex>
 #include <vector>
+#include <cmath>
 #include <limits>
 using namespace std;
 
@@ -45,7 +46,7 @@ public:
         for (int i = 0; i < products.size(); i++)
         {
             // calculate each product price:
-            float productValue = products[i].price * float(products[i].quantity);
+            float productValue = round(products[i].price * float(products[i].quantity) * 100) / 100;
             // store/assign it in Product object:
             products[i].totalNet = productValue;
             // Add item total price to cart net value:
@@ -57,12 +58,12 @@ public:
 
     float calcVat()
     {
-        VAT = netCost * vatValue;
+        VAT = round(netCost * vatValue * 100) / 100;
     };
 
     float calcGross()
     {
-        grossCost = netCost + VAT;
+        grossCost = round((netCost + VAT) * 100) / 100;
     };
 
     // constructor - "creation template"
