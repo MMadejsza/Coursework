@@ -4,8 +4,10 @@
 #include <limits>
 using namespace std;
 
+// creating customer class / template to store collected data
 class Customer
 {
+    // public attributes:
 public:
     string name;
     string address;
@@ -13,6 +15,7 @@ public:
     string cardNumber;
     string expiryDate;
     string secretCode;
+    // constructor - "creation template"
     Customer(string n, string a, string p, string c, string ex, string sec)
     {
         name = n;
