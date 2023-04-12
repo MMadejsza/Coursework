@@ -30,25 +30,42 @@ class Cart
 public:
     string owner;
     vector<Product> products;
-    float netCost = calcNet();
+    float netCost; // = calcNet();
     float vatValue = 0.2;
     float VAT = calcVat();
+
     float grossCost = calcGross();
 
     // methods:
     float calcNet()
     {
-        return 3.2;
+        cout << "CalcNet()" << endl;
+        cout << "products.size()" << products.size() << endl;
+        float cartNetValue = 0;
+        for (int i = 0; i < products.size(); i++)
+        {
+            float productValue = products[i].price * float(products[i].quantity);
+            // Tracing:
+            // cout << endl
+            //      << products[i].name << "cena: " << products[i].price << "ilosc: " << products[i].quantity << "Net product: " << productValue << endl;
+            cartNetValue += productValue;
+        };
+        netCost = cartNetValue;
+        return cartNetValue;
     };
 
     float calcVat()
     {
-        cout << "calcVat";
+        for (int i = 0; i < products.size(); i++)
+        {
+            cout
+                << products[i].name << " " << products[i].quantity << endl;
+        };
     };
 
     float calcGross()
     {
-        cout << "calcGross";
+        return 0.0;
     };
 
     // constructor - "creation template"
@@ -56,6 +73,7 @@ public:
     {
         owner = name;
         products = productsVector;
+        calcNet();
     };
 };
 
@@ -137,14 +155,8 @@ auto productsForm(auto Customer)
     // instantiate Cart with product and assign it to customer:
     Cart Cart1(productsVector, Customer.name);
     return Cart1;
-
-    // Tracing:
-    // for (int i = 0; i < productsVector.size(); i++)
-    // {
-    //     cout
-    //         << productsVector[i].name << " " << productsVector[i].quantity << endl;
-    // };
 }
+
 // function validating expected input type "typo" and according message:
 string validation(string typo, string msg)
 {
@@ -209,12 +221,19 @@ string validation(string typo, string msg)
 // function grouping customer data related inputs
 auto customerInputForm()
 {
-    string name = validation("name", "Enter a name (No special characters or numbers): ");
-    string address = validation("none", "Enter 1st line of the address");
-    string postcode = validation("postcode", "Enter postcode in format (XXX(x) XXX)");
-    string cardNumber = validation("card", "Enter 16-digit card number");
-    string expiryDate = validation("date", "Enter the expiry date (DD/MM/YY format) ");
-    string secretCode = validation("none", "Enter your secret code");
+    // string name = validation("name", "Enter a name (No special characters or numbers): ");
+    // string address = validation("none", "Enter 1st line of the address");
+    // string postcode = validation("postcode", "Enter postcode in format (XXX(x) XXX)");
+    // string cardNumber = validation("card", "Enter 16-digit card number");
+    // string expiryDate = validation("date", "Enter the expiry date (DD/MM/YY format) ");
+    // string secretCode = validation("none", "Enter your secret code");
+
+    string name = "a";
+    string address = "a";
+    string postcode = "a";
+    string cardNumber = "a";
+    string expiryDate = "a";
+    string secretCode = "a";
 
     Customer Customer1(name, address, postcode, cardNumber, expiryDate, secretCode);
     return Customer1;
@@ -233,6 +252,4 @@ int main()
     auto Customer1 = customerInputForm();
     // productsForm returning Cart object signed by Customer;
     auto Cart1 = productsForm(Customer1);
-    cout << "z maina: " << Cart1.netCost << endl;
-    cout << "z maina: " << Cart1.owner << endl;
 }
