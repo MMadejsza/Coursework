@@ -24,12 +24,35 @@ public:
     };
 };
 
+// creating customer class / template to store collected data
+class Customer
+{
+    // public attributes:
+public:
+    string name;
+    string address;
+    string postcode;
+    string cardNumber;
+    string expiryDate;
+    string secretCode;
+    // constructor - "creation template"
+    Customer(string n, string a, string p, string c, string ex, string sec)
+    {
+        name = n;
+        address = a;
+        postcode = p;
+        cardNumber = c;
+        expiryDate = ex;
+        secretCode = sec;
+    };
+};
+
 // creating Cart class / template to store collected data
 class Cart
 {
     // public attributes:
 public:
-    string owner;
+    vector<Customer> ownerDetails;
     vector<Product> products;
     float netCost;
     float vatValue = 0.2;
@@ -65,38 +88,85 @@ public:
         grossCost = round((netCost + VAT) * 100) / 100;
     };
 
-    // constructor - "creation template"
-    Cart(vector<Product> productsVector, string name)
+    int printInvoice(string custName, string orderDescription[], int quantities[], int unitCost[])
     {
-        owner = name;
+        /*
+         * Print Invoice to the console
+         * Parameters:
+         * custName: the name to appear on the invoice
+         * orderDescription[]: an array of strings describing the items for the invoice
+         * quantities[]: an array of ints denoting the quantities of each item being
+         * ordered
+         * unitCost[]: the unit cost (in pence) of each item being ordered
+         *
+         * Returns the total cost (including VAT) in pence
+         */
+
+        // Print the invoice header
+        printHeader(custName);
+
+        // Print the items line by line + return total cost
+        int totalPrice = printItems(orderDescription, quantities, unitCost);
+
+        // Print the invoice footer
+        totalPrice = printFooter(totalPrice);
+        return totalPrice;
+    }
+
+    int printFooter(int totalPrice)
+    {
+        // Print the invoice footer, with total
+        // Returns totalPrice with VAT
+
+        cout << "\nTotal \t\t = " << totalPrice;
+        totalPrice = addVAT(totalPrice);
+        cout << "Total+VAT \t = " << totalPrice;
+        return totalPrice;
+    }
+
+    int addVAT(int cost)
+    {
+        // Add VAT 	tost
+        return cost + (int)(cost * VAT);
+    }
+
+    int printItems(string orderDescription[], int quantities[], int unitCost[])
+    {
+        // Parameters as for PrintInvoice()
+        // Returns total price (ex VAT)
+        int totalPrice = 0; // Total cost of items bought
+        for (int z = 0; z < sizeof(orderDescription); z++)
+        {                                            // Loop through each item
+            int price = unitCost[z] * quantities[z]; // Calculate price for each
+            // item
+            totalPrice = totalPrice + price;
+            // Print line on invoice
+            cout << orderDescription[z] << "\tx " << quantities[z] << "\t = " << price << endl;
+        }
+        return totalPrice;
+    }
+
+    void printHeader(string custName)
+    {
+        // Print invoice header
+        cout << "I N V O I C E \n";
+        cout << "Item\tQty\tCost(p)\n";
+
+        if (custName != "")
+        {
+            cout << "Customer: " << custName << endl;
+        }
+    }
+
+    // constructor - "creation template"
+    Cart(vector<Product> productsVector, vector<Customer> owner)
+    {
+        ownerDetails = owner;
         products = productsVector;
         // call straight away when instantiating:
         calcNet();
         calcVat();
         calcGross();
-    };
-};
-
-// creating customer class / template to store collected data
-class Customer
-{
-    // public attributes:
-public:
-    string name;
-    string address;
-    string postcode;
-    string cardNumber;
-    string expiryDate;
-    string secretCode;
-    // constructor - "creation template"
-    Customer(string n, string a, string p, string c, string ex, string sec)
-    {
-        name = n;
-        address = a;
-        postcode = p;
-        cardNumber = c;
-        expiryDate = ex;
-        secretCode = sec;
     };
 };
 
@@ -131,7 +201,7 @@ int productQty(string msg)
 }
 
 // function grouping product data related inputs
-auto productsForm(auto Customer)
+auto productsForm(auto Cust)
 {
     // int beans = productQty("Enter Baked Beans units to buy.");
     // int popcorn = productQty("Enter Popcorn units to buy.");
@@ -152,13 +222,15 @@ auto productsForm(auto Customer)
     // declare container of products:
     vector<Product> productsVector;
     // push products into it:
-    productsVector.push_back(Beans);
-    productsVector.push_back(Popcorn);
-    productsVector.push_back(Milk);
-    productsVector.push_back(Bread);
+    productsVector.insert(productsVector.end(), {Beans, Popcorn, Milk, Bread});
+    // productsVector.push_back(Popcorn);
+    // productsVector.push_back(Milk);
+    // productsVector.push_back(Bread);
+    vector<Customer> ownerDetails;
+    ownerDetails.push_back(Cust);
 
     // instantiate Cart with product and assign it to customer:
-    Cart Cart1(productsVector, Customer.name);
+    Cart Cart1(productsVector, ownerDetails);
     return Cart1;
 }
 
@@ -257,11 +329,14 @@ int main()
     auto Customer1 = customerInputForm();
     // productsForm returning Cart object signed by Customer;
     auto Cart1 = productsForm(Customer1);
-    for (int i = 0; i < Cart1.products.size(); i++)
-    {
-        cout << endl
-             << Cart1.products[i].name << " " << Cart1.products[i].totalNet << endl;
-    }
+    // for (int i = 0; i < 1; i++)
+    // {
+    //     cout << endl
+    //          << Cart1.ownerDetails[i].name << " " << Cart1.ownerDetails[i].address << endl;
+    // }
+    cout << endl
+         << Cart1.ownerDetails[0].name << " " << Cart1.ownerDetails[0].address << endl;
+
     cout << endl
          << "cart netCost " << Cart1.netCost << endl;
     cout << endl
