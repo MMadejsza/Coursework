@@ -5,31 +5,6 @@
 #include <limits>
 using namespace std;
 
-// creating Cart class / template to store collected data
-class Cart
-{
-    // public attributes:
-public:
-    vector<Product> products;
-    float netCost = calcNet();
-    float vatValue = 0.2;
-    float VAT = calcVat();
-    float grossCost = calcGross();
-
-    // methods:
-    float calcNet(){};
-
-    float calcVat(){};
-
-    float calcGross(){};
-
-    // constructor - "creation template"
-    Cart(vector<Product> productsVector)
-    {
-        products = productsVector;
-    };
-};
-
 // creating Product class / template to store collected data
 class Product
 {
@@ -45,6 +20,42 @@ public:
         name = n;
         price = p;
         quantity = q;
+    };
+};
+
+// creating Cart class / template to store collected data
+class Cart
+{
+    // public attributes:
+public:
+    string owner;
+    vector<Product> products;
+    float netCost = calcNet();
+    float vatValue = 0.2;
+    float VAT = calcVat();
+    float grossCost = calcGross();
+
+    // methods:
+    float calcNet()
+    {
+        return 3.2;
+    };
+
+    float calcVat()
+    {
+        cout << "calcVat";
+    };
+
+    float calcGross()
+    {
+        cout << "calcGross";
+    };
+
+    // constructor - "creation template"
+    Cart(vector<Product> productsVector, string name)
+    {
+        owner = name;
+        products = productsVector;
     };
 };
 
@@ -102,7 +113,7 @@ int productQty(string msg)
 }
 
 // function grouping product data related inputs
-void productsForm()
+auto productsForm(Customer Customer)
 {
     int beans = productQty("Enter Baked Beans units to buy.");
     int popcorn = productQty("Enter Popcorn units to buy.");
@@ -124,13 +135,15 @@ void productsForm()
     productsVector.push_back(Bread);
 
     // instantiate Cart with product and assign it to customer:
+    Cart Cart1(productsVector, Customer.name);
+    return Cart1;
 
     // Tracing:
-    for (int i = 0; i < productsVector.size(); i++)
-    {
-        cout
-            << productsVector[i].name << " " << productsVector[i].quantity << endl;
-    };
+    // for (int i = 0; i < productsVector.size(); i++)
+    // {
+    //     cout
+    //         << productsVector[i].name << " " << productsVector[i].quantity << endl;
+    // };
 }
 // function validating expected input type "typo" and according message:
 string validation(string typo, string msg)
@@ -194,7 +207,7 @@ string validation(string typo, string msg)
 };
 
 // function grouping customer data related inputs
-void customerInputForm()
+auto customerInputForm()
 {
     string name = validation("name", "Enter a name (No special characters or numbers): ");
     string address = validation("none", "Enter 1st line of the address");
@@ -204,18 +217,22 @@ void customerInputForm()
     string secretCode = validation("none", "Enter your secret code");
 
     Customer Customer1(name, address, postcode, cardNumber, expiryDate, secretCode);
-
-    cout << endl
-         << "name " << Customer1.name << endl
-         << "address " << Customer1.address << endl
-         << "postcode " << Customer1.postcode << endl
-         << "cardNumber " << Customer1.cardNumber << endl
-         << "expiryDate " << Customer1.expiryDate << endl
-         << "secretCode " << Customer1.secretCode << endl;
+    return Customer1;
+    // cout << endl
+    //      << "name " << Customer1.name << endl
+    //      << "address " << Customer1.address << endl
+    //      << "postcode " << Customer1.postcode << endl
+    //      << "cardNumber " << Customer1.cardNumber << endl
+    //      << "expiryDate " << Customer1.expiryDate << endl
+    //      << "secretCode " << Customer1.secretCode << endl;
 };
 
 int main()
 {
-    // customerInputForm();
-    productsForm();
+    // customerInputForm returning Customer object;
+    auto Customer1 = customerInputForm();
+    // productsForm returning Cart object signed by Customer;
+    auto Cart1 = productsForm(Customer1);
+    cout << "z maina: " << Cart1.netCost << endl;
+    cout << "z maina: " << Cart1.owner << endl;
 }
