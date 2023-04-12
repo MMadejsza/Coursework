@@ -4,7 +4,6 @@
 #include <limits>
 using namespace std;
 
-// start here - drop cart attribute and start other classes - carry on. later on you'll assign cart to attribute;
 class Customer
 {
 public:
@@ -14,7 +13,6 @@ public:
     string carNumber;
     string expiryDate;
     string securityMsg;
-    auto cart;
     Customer(string n, string a, string p, string c, string ex, string sec)
     {
         name = n;
