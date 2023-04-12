@@ -46,10 +46,12 @@ public:
         {
             // calculate each product price:
             float productValue = products[i].price * float(products[i].quantity);
-            // store it in product object:
+            // store/assign it in Product object:
             products[i].totalNet = productValue;
+            // Add item total price to cart net value:
             cartNetValue += productValue;
         };
+        // assign result to Cart:
         netCost = cartNetValue;
     };
 
@@ -68,6 +70,7 @@ public:
     {
         owner = name;
         products = productsVector;
+        // call straight away when instantiating:
         calcNet();
         calcVat();
         calcGross();
