@@ -113,7 +113,7 @@ int productQty(string msg)
 }
 
 // function grouping product data related inputs
-auto productsForm(Customer Customer)
+auto productsForm(auto Customer)
 {
     int beans = productQty("Enter Baked Beans units to buy.");
     int popcorn = productQty("Enter Popcorn units to buy.");
