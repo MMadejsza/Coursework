@@ -10,17 +10,17 @@ public:
     string name;
     string address;
     string postcode;
-    string carNumber;
+    string cardNumber;
     string expiryDate;
-    string securityMsg;
+    string secretCode;
     Customer(string n, string a, string p, string c, string ex, string sec)
     {
         name = n;
         address = a;
         postcode = p;
-        carNumber = c;
+        cardNumber = c;
         expiryDate = ex;
-        securityMsg = sec;
+        secretCode = sec;
     };
 };
 
@@ -138,17 +138,19 @@ void customerInputForm()
     string expiryDate = validation("date", "Enter the expiry date (DD/MM/YY format) ");
     string secretCode = validation("none", "Enter your secret code");
 
+    Customer Customer1(name, address, postcode, cardNumber, expiryDate, secretCode);
+
     cout << endl
-         << "name " << name << endl
-         << "address " << address << endl
-         << "postcode " << postcode << endl
-         << "cardNumber " << cardNumber << endl
-         << "expiryDate " << expiryDate << endl
-         << "secretCode " << secretCode << endl;
+         << "name " << Customer1.name << endl
+         << "address " << Customer1.address << endl
+         << "postcode " << Customer1.postcode << endl
+         << "cardNumber " << Customer1.cardNumber << endl
+         << "expiryDate " << Customer1.expiryDate << endl
+         << "secretCode " << Customer1.secretCode << endl;
 };
 
 int main()
 {
     customerInputForm();
-    productsForm();
+    // productsForm();
 }
