@@ -39,16 +39,14 @@ public:
     // methods:
     float calcNet()
     {
-        cout << "CalcNet()" << endl;
-        cout << "products.size()" << products.size() << endl;
         float cartNetValue = 0;
         for (int i = 0; i < products.size(); i++)
         {
             float productValue = products[i].price * float(products[i].quantity);
-            // Tracing:
+            // Tracing
             // cout << endl
             //      << products[i].name << "cena: " << products[i].price << "ilosc: " << products[i].quantity << "Net product: " << productValue << endl;
-            cartNetValue += productValue;
+            // cartNetValue += productValue;
         };
         netCost = cartNetValue;
         return cartNetValue;
