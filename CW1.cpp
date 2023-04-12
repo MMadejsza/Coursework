@@ -33,9 +33,8 @@ public:
     vector<Product> products;
     float netCost;
     float vatValue = 0.2;
-    float VAT = calcVat();
-
-    float grossCost = calcGross();
+    float VAT;
+    float grossCost;
 
     // methods:
     // net calculations:
@@ -56,16 +55,12 @@ public:
 
     float calcVat()
     {
-        for (int i = 0; i < products.size(); i++)
-        {
-            cout
-                << products[i].name << " " << products[i].quantity << endl;
-        };
+        VAT = netCost * vatValue;
     };
 
     float calcGross()
     {
-        return 0.0;
+        grossCost = netCost + VAT;
     };
 
     // constructor - "creation template"
@@ -74,6 +69,8 @@ public:
         owner = name;
         products = productsVector;
         calcNet();
+        calcVat();
+        calcGross();
     };
 };
 
@@ -252,13 +249,17 @@ int main()
     auto Customer1 = customerInputForm();
     // productsForm returning Cart object signed by Customer;
     auto Cart1 = productsForm(Customer1);
-    cout << endl
-         << "cart netCost " << Cart1.netCost << endl;
     for (int i = 0; i < Cart1.products.size(); i++)
     {
         cout << endl
              << Cart1.products[i].name << " " << Cart1.products[i].totalNet << endl;
     }
+    cout << endl
+         << "cart netCost " << Cart1.netCost << endl;
+    cout << endl
+         << "cart Vat " << Cart1.VAT << endl;
+    cout << endl
+         << "cart gross " << Cart1.grossCost << endl;
 }
 // ? Resources:
 // ? https://developer.mozilla.org/en-US/
