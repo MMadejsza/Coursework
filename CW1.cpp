@@ -4,6 +4,24 @@
 #include <limits>
 using namespace std;
 
+// creating Product class / template to store collected data
+class Product
+{
+    // public attributes:
+public:
+    string name;
+    float price;
+    int quantity;
+
+    // constructor - "creation template"
+    Product(string n, float p, int q)
+    {
+        name = n;
+        price = p;
+        quantity = q;
+    };
+};
+
 // creating customer class / template to store collected data
 class Customer
 {
@@ -64,11 +82,17 @@ void productsForm()
     int popcorn = productQty("Enter Popcorn units to buy.");
     int milk = productQty("Enter Evaporated Milk units to buy.");
     int bread = productQty("Enter Bread units to buy.");
+
+    Product Beans("Baked Beans", 1.20, beans);
+    Product Popcorn("Popcorn", 0.80, popcorn);
+    Product Milk("Evaporated Milk", 1.15, milk);
+    Product Bread("Bread", 2.34, bread);
+
     cout << endl
-         << "beans " << beans << endl
-         << "popcorn " << popcorn << endl
-         << "milk " << milk << endl
-         << "bread " << bread << endl;
+         << Beans.name << " " << Beans.quantity << endl
+         << Popcorn.name << " " << Popcorn.quantity << endl
+         << Milk.name << " " << Milk.quantity << endl
+         << Bread.name << " " << Bread.quantity << endl;
 }
 // function validating expected input type "typo" and according message:
 string validation(string typo, string msg)
@@ -154,6 +178,6 @@ void customerInputForm()
 
 int main()
 {
-    customerInputForm();
-    // productsForm();
+    // customerInputForm();
+    productsForm();
 }
