@@ -1,8 +1,34 @@
 #include <iostream>
 #include <string>
 #include <regex>
+#include <vector>
 #include <limits>
 using namespace std;
+
+// creating Cart class / template to store collected data
+class Cart
+{
+    // public attributes:
+public:
+    vector<Product> products;
+    float netCost = calcNet();
+    float vatValue = 0.2;
+    float VAT = calcVat();
+    float grossCost = calcGross();
+
+    // methods:
+    float calcNet(){};
+
+    float calcVat(){};
+
+    float calcGross(){};
+
+    // constructor - "creation template"
+    Cart(vector<Product> productsVector)
+    {
+        products = productsVector;
+    };
+};
 
 // creating Product class / template to store collected data
 class Product
@@ -83,16 +109,28 @@ void productsForm()
     int milk = productQty("Enter Evaporated Milk units to buy.");
     int bread = productQty("Enter Bread units to buy.");
 
+    // instantiate objects for each product:
     Product Beans("Baked Beans", 1.20, beans);
     Product Popcorn("Popcorn", 0.80, popcorn);
     Product Milk("Evaporated Milk", 1.15, milk);
     Product Bread("Bread", 2.34, bread);
 
-    cout << endl
-         << Beans.name << " " << Beans.quantity << endl
-         << Popcorn.name << " " << Popcorn.quantity << endl
-         << Milk.name << " " << Milk.quantity << endl
-         << Bread.name << " " << Bread.quantity << endl;
+    // declare container of products:
+    vector<Product> productsVector;
+    // push products into it:
+    productsVector.push_back(Beans);
+    productsVector.push_back(Popcorn);
+    productsVector.push_back(Milk);
+    productsVector.push_back(Bread);
+
+    // instantiate Cart with product and assign it to customer:
+
+    // Tracing:
+    for (int i = 0; i < productsVector.size(); i++)
+    {
+        cout
+            << productsVector[i].name << " " << productsVector[i].quantity << endl;
+    };
 }
 // function validating expected input type "typo" and according message:
 string validation(string typo, string msg)
