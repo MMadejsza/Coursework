@@ -100,6 +100,7 @@ public:
         // Print the invoice header
         printHeader(header, paddings, width, c);
         printItems(header, paddings, width, products);
+        printFooter(header, paddings, width, VAT, grossCost, netCost);
         // // Print the items line by line + return total cost
         // int totalPrice = printItems(orderDescription, quantities, unitCost);
 
@@ -108,15 +109,16 @@ public:
         // return totalPrice;
     }
 
-    int printFooter(int totalPrice)
+    int printFooter(string header, string paddings, int width, float VAT,
+                    float grossCost, float netCost)
     {
-        // Print the invoice footer, with total
-        // Returns totalPrice with VAT
-
-        cout << "\nTotal \t\t = " << totalPrice;
-        // totalPrice = addVAT(totalPrice);
-        cout << "Total+VAT \t = " << totalPrice;
-        return totalPrice;
+        centeredLine(" ", width, paddings, header);
+        centeredLine("TOTAL:", width, paddings, header);
+        tripleLine("headings", "Total net:", " ", to_string(netCost), width, paddings, header);
+        tripleLine("headings", "VAT:", " ", to_string(VAT), width, paddings, header);
+        tripleLine("headings", "Total inc. VAT:", " ", to_string(grossCost), width, paddings, header);
+        centeredLine(" ", width, paddings, header);
+        centeredLine(header, width, paddings, header);
     }
 
     void tripleLine(string type, string text, string text2, string text3, int toEndOfHeaderDist, string padding, string header)
@@ -265,13 +267,14 @@ public:
     // Prints center section - center header + list of items:
     int printItems(string header, string paddings, int width, vector<Product> products)
     {
-        vector<string> headings{"Item:", "Qty:", "Cost:"};
+        vector<string> headings{"Item:", "Qty x Price:", "Cost:"};
         string text = "Item:";
         string text2 = "Qty:";
         string text3 = "Cost:";
         int toEndOfHeaderDist = width;
 
         tripleLine("headings", headings[0], headings[1], headings[2], toEndOfHeaderDist, paddings, header);
+        centeredLine(" ", width, paddings, header);
 
         for (int i = 0; i < products.size(); i++)
         {
@@ -299,7 +302,6 @@ public:
         centeredLine(c.expiryDate, toEndOfHeaderDist, padding, header);
         centeredLine(c.secretCode, toEndOfHeaderDist, padding, header);
         centeredLine(" ", toEndOfHeaderDist, padding, header);
-        // tripleLine(text, text2, text3, toEndOfHeaderDist, padding, header);
     }
 
     // constructor - "creation template"
