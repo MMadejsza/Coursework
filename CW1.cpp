@@ -91,21 +91,15 @@ public:
 
     int printInvoice()
     {
-        /*
-         * Print Invoice to the console
-         * Parameters:
-         * custName: the name to appear on the invoice
-         * orderDescription[]: an array of strings describing the items for the invoice
-         * quantities[]: an array of ints denoting the quantities of each item being
-         * ordered
-         * unitCost[]: the unit cost (in pence) of each item being ordered
-         *
-         * Returns the total cost (including VAT) in pence
-         */
+        // Describe invoice
+        string header = " I N V O I C E ";
+        string paddings = " * ";
+        int width = 39;
+        Customer c = ownerDetails[0];
 
         // Print the invoice header
-        printHeader();
-
+        printHeader(header, paddings, width, c);
+        printItems(header, paddings, width, products);
         // // Print the items line by line + return total cost
         // int totalPrice = printItems(orderDescription, quantities, unitCost);
 
@@ -120,40 +114,111 @@ public:
         // Returns totalPrice with VAT
 
         cout << "\nTotal \t\t = " << totalPrice;
-        totalPrice = addVAT(totalPrice);
+        // totalPrice = addVAT(totalPrice);
         cout << "Total+VAT \t = " << totalPrice;
         return totalPrice;
     }
 
-    int addVAT(int cost)
+    void tripleLine(string type, string text, string text2, string text3, int toEndOfHeaderDist, string padding, string header)
     {
-        // Add VAT 	tost
-        return cost + (int)(cost * VAT);
-    }
+        // Calculations - everything is aligned to right
+        // Entire invoice width is previous double distance to the end of text - this text because it's symmetric. We add 1 padding because we don't set its field at the end of line
+        int entireWidth = toEndOfHeaderDist + (toEndOfHeaderDist - header.size() + padding.size());
+        // 1/3 Width:
+        int oneThirdOfInvoice = entireWidth / 3;
+        // center of 1/3 Width: (it's width of field ending at the center remembering about alignment to right)
+        int centerOfOneThird = oneThirdOfInvoice / 2;
+        // moving by text half to center it
+        int centeredThirdText = centerOfOneThird + (0.5 * text.size());
+        int centeredThirdText2 = centerOfOneThird + (0.5 * text2.size());
+        int centeredThirdText3 = centerOfOneThird + (0.5 * text3.size());
+        // rest to fill up as 1/3 - width to the end of text -1 for ending with space " "
+        int toEndOfThird = oneThirdOfInvoice - centeredThirdText - 1;
+        int toEndOfThird2 = oneThirdOfInvoice - centeredThirdText2 - 1;
+        int toEndOfThird3 = oneThirdOfInvoice - centeredThirdText3 - 1;
 
-    int printItems(string orderDescription[], int quantities[], int unitCost[])
-    {
-        // Parameters as for PrintInvoice()
-        // Returns total price (ex VAT)
-        int totalPrice = 0; // Total cost of items bought
-        for (int z = 0; z < sizeof(orderDescription); z++)
-        {                                            // Loop through each item
-            int price = unitCost[z] * quantities[z]; // Calculate price for each
-            // item
-            totalPrice = totalPrice + price;
-            // Print line on invoice
-            cout << orderDescription[z] << "\tx " << quantities[z] << "\t = " << price << endl;
+        if (type == "headings")
+        {
+            // 1/3 of Invoice
+            // Padding
+            cout
+                << setw(padding.size())
+                << padding;
+            cout
+                << setw(centerOfOneThird + (0.5 * text.size()))
+                << setfill('.')
+                << text;
+            cout
+                << setw(toEndOfThird - (padding.size() / 2))
+                << setfill('.')
+                << " ";
+            // 1/3 of Invoice
+            cout
+                << setw(centerOfOneThird + (0.5 * text2.size()))
+                << setfill('.')
+                << text2;
+            cout
+                << setw(toEndOfThird2 - (padding.size() / 2))
+                << setfill('.')
+                << " ";
+            // 1/3 of Invoice
+            cout
+                << setw(centerOfOneThird + (0.5 * text3.size()))
+                << setfill('.')
+                << text3;
+            cout
+                << setw(toEndOfThird3 + padding.size() + 2)
+                << setfill('.')
+                << padding << endl;
         }
-        return totalPrice;
+        else
+        {
+            // 1/3 of Invoice
+            // Padding
+            cout
+                << setw(padding.size())
+                << padding;
+            cout
+                << setw(centerOfOneThird + (0.5 * text.size()))
+                << setfill('.')
+                << text;
+            cout
+                << setw(toEndOfThird - (padding.size() / 2))
+                << setfill('.')
+                << " ";
+            // 1/3 of Invoice
+            cout
+                << setw(centerOfOneThird + (0.5 * text2.size()))
+                << setfill('.')
+                << text2;
+            cout
+                << setw(toEndOfThird2 - (padding.size() / 2))
+                << setfill('.')
+                << " ";
+            // 1/3 of Invoice
+            cout
+                << setw(centerOfOneThird + (0.5 * text3.size()))
+                << setfill('.')
+                << text3;
+            cout
+                << setw(toEndOfThird3 + padding.size() + 2)
+                << setfill('.')
+                << padding << endl;
+        }
     }
 
     void centeredLine(string text, int toEndOfHeaderDist, string padding, string header)
     {
-
+        // Calculations - everything is aligned to right
+        // Width of field ending in the center of Header Text, "toEndOfHeaderDist" is initial value which we treat as width of invoice.
         int distToCenterOfHeader = toEndOfHeaderDist - (header.size() / 2);
-        int entireWidth = toEndOfHeaderDist + (toEndOfHeaderDist - header.size() + padding.size()); // if we have padding on the left with field size and we don't add field size at the end
+        // Width of field ending with the end of centered text (moved right/wider)
         int toEndOfCenteredTextDist = distToCenterOfHeader + (0.5 * text.size());
+        // Entire invoice width is previous double distance to the end of text - this text because it's symmetric. We add 1 padding because we don't set its field at the end of line
+        int entireWidth = toEndOfHeaderDist + (toEndOfHeaderDist - header.size() + padding.size());
+        // Field width to the end of the invoice is conditional like below
         int endOfTextToEnd;
+
         if (header.size() == text.size())
         {
             endOfTextToEnd = (toEndOfHeaderDist - text.size() + padding.size());
@@ -163,9 +228,10 @@ public:
             endOfTextToEnd = entireWidth - toEndOfCenteredTextDist;
         };
 
+        // If we center actual header of Invoice we change filling characters:
         if (text == header)
         {
-            cout // field for padding only because we want to keep default right align but start from padding
+            cout // field for padding only because we want to keep default right align but stil start from specific padding
                 << setw(padding.size())
                 << padding;
             cout
@@ -181,7 +247,7 @@ public:
         else
         {
 
-            cout // field for padding only because we want to keep default right align but start from padding
+            cout
                 << setw(padding.size())
                 << padding;
             cout
@@ -196,15 +262,33 @@ public:
         }
     }
 
-    void printHeader()
+    // Prints center section - center header + list of items:
+    int printItems(string header, string paddings, int width, vector<Product> products)
     {
-        // Describe invoice
-        string header = " I N V O I C E ";
-        string padding = " * ";
-        Customer c = ownerDetails[0];
-        int toEndOfHeaderDist = 30;
+        vector<string> headings{"Item:", "Qty:", "Cost:"};
+        string text = "Item:";
+        string text2 = "Qty:";
+        string text3 = "Cost:";
+        int toEndOfHeaderDist = width;
 
-        // Print invoice header
+        tripleLine("headings", headings[0], headings[1], headings[2], toEndOfHeaderDist, paddings, header);
+
+        for (int i = 0; i < products.size(); i++)
+        {
+            tripleLine("products", products[i].name, to_string(products[i].quantity), to_string(products[i].totalNet), toEndOfHeaderDist, paddings, header);
+        }
+    }
+
+    // Prints Header section - "Invoice + customer details"
+    void printHeader(string header, string padding, int length, Customer c)
+    {
+
+        // string text = "Item:";
+        // string text2 = "Qty:";
+        // string text3 = "Cost:";
+        int toEndOfHeaderDist = length;
+
+        // Print invoice elements using specific functions:
         centeredLine(header, toEndOfHeaderDist, padding, header);
         centeredLine(" ", toEndOfHeaderDist, padding, header);
         centeredLine("Customer:", toEndOfHeaderDist, padding, header);
@@ -215,8 +299,7 @@ public:
         centeredLine(c.expiryDate, toEndOfHeaderDist, padding, header);
         centeredLine(c.secretCode, toEndOfHeaderDist, padding, header);
         centeredLine(" ", toEndOfHeaderDist, padding, header);
-
-        cout << "Item\tQty\tCost(p)\n";
+        // tripleLine(text, text2, text3, toEndOfHeaderDist, padding, header);
     }
 
     // constructor - "creation template"
@@ -393,7 +476,7 @@ int main()
     auto Customer1 = customerInputForm();
     // productsForm returning Cart object signed by Customer;
     auto Cart1 = productsForm(Customer1);
-    Cart1.printHeader();
+    Cart1.printInvoice();
 
     // for (int i = 0; i < 1; i++)
     // {
