@@ -3,6 +3,7 @@
 #include <regex>
 #include <vector>
 #include <cmath>
+#include <iomanip>
 using namespace std;
 
 // creating Product class / template to store collected data
@@ -88,7 +89,7 @@ public:
         grossCost = round((netCost + VAT) * 100) / 100;
     };
 
-    int printInvoice(string custName, string orderDescription[], int quantities[], int unitCost[])
+    int printInvoice()
     {
         /*
          * Print Invoice to the console
@@ -103,14 +104,14 @@ public:
          */
 
         // Print the invoice header
-        printHeader(custName);
+        printHeader();
 
-        // Print the items line by line + return total cost
-        int totalPrice = printItems(orderDescription, quantities, unitCost);
+        // // Print the items line by line + return total cost
+        // int totalPrice = printItems(orderDescription, quantities, unitCost);
 
-        // Print the invoice footer
-        totalPrice = printFooter(totalPrice);
-        return totalPrice;
+        // // Print the invoice footer
+        // totalPrice = printFooter(totalPrice);
+        // return totalPrice;
     }
 
     int printFooter(int totalPrice)
@@ -146,22 +147,82 @@ public:
         return totalPrice;
     }
 
-    void printHeader(string custName)
+    void centeredLine(string text, int toEndOfHeaderDist, string padding, string header)
     {
-        // Print invoice header
-        cout << "I N V O I C E \n";
-        cout << "Item\tQty\tCost(p)\n";
 
-        if (custName != "")
+        int distToCenterOfHeader = toEndOfHeaderDist - (header.size() / 2);
+        int entireWidth = toEndOfHeaderDist + (toEndOfHeaderDist - header.size() + padding.size()); // if we have padding on the left with field size and we don't add field size at the end
+        int toEndOfCenteredTextDist = distToCenterOfHeader + (0.5 * text.size());
+        int endOfTextToEnd;
+        if (header.size() == text.size())
         {
-            cout << "Customer: " << custName << endl;
+            endOfTextToEnd = (toEndOfHeaderDist - text.size() + padding.size());
+        }
+        else
+        {
+            endOfTextToEnd = entireWidth - toEndOfCenteredTextDist;
+        };
+
+        if (text == header)
+        {
+            cout // field for padding only because we want to keep default right align but start from padding
+                << setw(padding.size())
+                << padding;
+            cout
+                << setw(distToCenterOfHeader + (0.5 * text.size()))
+                << setfill('*')
+                << text;
+            cout
+                << setw(endOfTextToEnd)
+                << setfill('*')
+                << padding
+                << endl;
+        }
+        else
+        {
+
+            cout // field for padding only because we want to keep default right align but start from padding
+                << setw(padding.size())
+                << padding;
+            cout
+                << setw(distToCenterOfHeader + (0.5 * text.size()))
+                << setfill(' ')
+                << text;
+            cout
+                << setw(endOfTextToEnd)
+                << setfill(' ')
+                << padding
+                << endl;
         }
     }
 
-    // constructor - "creation template"
-    Cart(vector<Product> productsVector, vector<Customer> owner)
+    void printHeader()
     {
-        ownerDetails = owner;
+        // Describe invoice
+        string header = " I N V O I C E ";
+        string padding = " * ";
+        Customer c = ownerDetails[0];
+        int toEndOfHeaderDist = 30;
+
+        // Print invoice header
+        centeredLine(header, toEndOfHeaderDist, padding, header);
+        centeredLine(" ", toEndOfHeaderDist, padding, header);
+        centeredLine("Customer:", toEndOfHeaderDist, padding, header);
+        centeredLine(c.name, toEndOfHeaderDist, padding, header);
+        centeredLine(c.address, toEndOfHeaderDist, padding, header);
+        centeredLine(c.postcode, toEndOfHeaderDist, padding, header);
+        centeredLine(c.cardNumber, toEndOfHeaderDist, padding, header);
+        centeredLine(c.expiryDate, toEndOfHeaderDist, padding, header);
+        centeredLine(c.secretCode, toEndOfHeaderDist, padding, header);
+        centeredLine(" ", toEndOfHeaderDist, padding, header);
+
+        cout << "Item\tQty\tCost(p)\n";
+    }
+
+    // constructor - "creation template"
+    Cart(vector<Product> productsVector, vector<Customer> ownerVector)
+    {
+        ownerDetails = ownerVector;
         products = productsVector;
         // call straight away when instantiating:
         calcNet();
@@ -201,7 +262,7 @@ int productQty(string msg)
 }
 
 // function grouping product data related inputs
-auto productsForm(auto Cust)
+Cart productsForm(Customer Cust)
 {
     // int beans = productQty("Enter Baked Beans units to buy.");
     // int popcorn = productQty("Enter Popcorn units to buy.");
@@ -226,11 +287,11 @@ auto productsForm(auto Cust)
     // productsVector.push_back(Popcorn);
     // productsVector.push_back(Milk);
     // productsVector.push_back(Bread);
-    vector<Customer> ownerDetails;
-    ownerDetails.push_back(Cust);
+    vector<Customer> ownerDetailsVector;
+    ownerDetailsVector.push_back(Cust);
 
     // instantiate Cart with product and assign it to customer:
-    Cart Cart1(productsVector, ownerDetails);
+    Cart Cart1(productsVector, ownerDetailsVector);
     return Cart1;
 }
 
@@ -305,14 +366,17 @@ auto customerInputForm()
     // string expiryDate = validation("date", "Enter the expiry date (DD/MM/YY format) ");
     // string secretCode = validation("none", "Enter your secret code");
 
-    string name = "a";
-    string address = "a";
-    string postcode = "a";
-    string cardNumber = "a";
-    string expiryDate = "a";
-    string secretCode = "a";
+    string name = "Maciej Madejsza";
+    string address = "6 Magpie way";
+    string postcode = "RG31 4SJ";
+    string cardNumber = "1111 2222 3333 4444";
+    string expiryDate = "12/12/12";
+    string secretCode = "SecretCode";
 
     Customer Customer1(name, address, postcode, cardNumber, expiryDate, secretCode);
+    // vector<Customer> customer1vector;
+    // customer1vector.push_back(Customer1);
+
     return Customer1;
     // cout << endl
     //      << "name " << Customer1.name << endl
@@ -329,20 +393,22 @@ int main()
     auto Customer1 = customerInputForm();
     // productsForm returning Cart object signed by Customer;
     auto Cart1 = productsForm(Customer1);
+    Cart1.printHeader();
+
     // for (int i = 0; i < 1; i++)
     // {
     //     cout << endl
     //          << Cart1.ownerDetails[i].name << " " << Cart1.ownerDetails[i].address << endl;
     // }
-    cout << endl
-         << Cart1.ownerDetails[0].name << " " << Cart1.ownerDetails[0].address << endl;
+    // cout << endl
+    //      << Cart1.ownerDetails[0].name << " " << Cart1.ownerDetails[0].address << endl;
 
-    cout << endl
-         << "cart netCost " << Cart1.netCost << endl;
-    cout << endl
-         << "cart Vat " << Cart1.VAT << endl;
-    cout << endl
-         << "cart gross " << Cart1.grossCost << endl;
+    // cout << endl
+    //      << "cart netCost " << Cart1.netCost << endl;
+    // cout << endl
+    //      << "cart Vat " << Cart1.VAT << endl;
+    // cout << endl
+    //      << "cart gross " << Cart1.grossCost << endl;
 }
 // ? Resources:
 // ? https://developer.mozilla.org/en-US/
