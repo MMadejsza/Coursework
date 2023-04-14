@@ -341,21 +341,21 @@ int productQty(string msg)
     string regCondition = "[0-9]+";
     // instantiate regex:
     regex reg(regCondition);
-    // print instruction for user what's expected from function
-    cout << msg << endl;
+
     // as long as input doesn't meet expectations:
     do
     {
+        // print instruction for user what's expected from function
+        cout << msg << endl;
         // error message in "if" for first iteration:
         if (!regex_match(datum, reg) && datum != "")
         {
             cout << errorMsg << endl;
         }
-
         // clean the buffer
         cin.clear();
         // request the input to "datum" again
-        getline(cin >> ws, datum);
+        cin >> datum;
     } while (!regex_match(datum, reg));
 
     // transform string input to integer
