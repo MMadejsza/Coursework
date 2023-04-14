@@ -1,9 +1,10 @@
 #include <iostream>
 #include <string>
-#include <regex>
-#include <vector>
-#include <cmath>
-#include <iomanip>
+#include <regex>     //regex for validation
+#include <vector>    //vectors
+#include <cmath>     //rounding calculations
+#include <iomanip>   //printing invoice
+#include <algorithm> //transform
 using namespace std;
 
 // creating Product class / template to store collected data of each product
@@ -458,44 +459,37 @@ string validation(string typo, string msg)
             // request the input to "datum" again
             getline(cin >> ws, datum);
         } while (!regex_match(datum, reg));
+        transform(datum.begin(), datum.end(), datum.begin(), ::toupper);
         return datum;
     }
 
     cout << msg << endl;
     // request the input allowing whitespaces
     getline(cin >> ws, datum);
+    transform(datum.begin(), datum.end(), datum.begin(), ::toupper);
     return datum;
 };
 
 // function grouping customer data related inputs
 auto customerInputForm()
 {
-    // string name = validation("name", "Enter a name (No special characters or numbers): ");
-    // string address = validation("none", "Enter 1st line of the address");
-    // string postcode = validation("postcode", "Enter postcode in format (XXX(x) XXX)");
-    // string cardNumber = validation("card", "Enter 16-digit card number");
-    // string expiryDate = validation("date", "Enter the expiry date (DD/MM/YY format) ");
-    // string secretCode = validation("none", "Enter your secret code");
+    string name = validation("name", "Enter a name (No special characters or numbers): ");
+    string address = validation("none", "Enter 1st line of the address");
+    string postcode = validation("postcode", "Enter postcode in format (XXX(x) XXX)");
+    string cardNumber = validation("card", "Enter 16-digit card number");
+    string expiryDate = validation("date", "Enter the expiry date (DD/MM/YY format) ");
+    string secretCode = validation("none", "Enter your secret code");
 
-    string name = "Maciej Madejsza";
-    string address = "6 Magpie way";
-    string postcode = "RG31 4SJ";
-    string cardNumber = "1111 2222 3333 4444";
-    string expiryDate = "12/12/12";
-    string secretCode = "SecretCode";
+    // string name = "Maciej Madejsza";
+    // string address = "6 Magpie way";
+    // string postcode = "RG31 4SJ";
+    // string cardNumber = "1111 2222 3333 4444";
+    // string expiryDate = "12/12/12";
+    // string secretCode = "SecretCode";
 
     Customer Customer1(name, address, postcode, cardNumber, expiryDate, secretCode);
-    // vector<Customer> customer1vector;
-    // customer1vector.push_back(Customer1);
 
     return Customer1;
-    // cout << endl
-    //      << "name " << Customer1.name << endl
-    //      << "address " << Customer1.address << endl
-    //      << "postcode " << Customer1.postcode << endl
-    //      << "cardNumber " << Customer1.cardNumber << endl
-    //      << "expiryDate " << Customer1.expiryDate << endl
-    //      << "secretCode " << Customer1.secretCode << endl;
 };
 
 int main()
