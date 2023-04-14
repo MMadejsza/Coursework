@@ -115,7 +115,7 @@ public:
         cout
             << setw(padding.size())
             << padding;
-        // IF PRINTING HEADINGS (1/3 and 2/3 unique)
+        // IF PRINTING HEADINGS
         if (type == "headings")
         {
             // 1/3 of Invoice
@@ -136,6 +136,16 @@ public:
                 << setw(toEndOfThird2 - (padding.size() / 2))
                 << setfill(' ')
                 << " ";
+            // 3/3 of Invoice
+            cout.precision(2);
+            cout
+                << setw(centerOfOneThird + (0.5 * price.size()))
+                << setfill(' ')
+                << cost;
+            cout
+                << setw(toEndOfThird3 + padding.size() + 2)
+                << setfill(' ')
+                << padding << endl;
         }
         // IF PRINTING PRODUCTS OR FOOTER  (the same 1st 1/3)
         if ((type == "products") || (type == "footer"))
@@ -175,7 +185,7 @@ public:
                 << setfill(' ')
                 << padding << endl;
         }
-        // IF PRINTING FOOTER ONLY (ONLY unique 2/3)
+        // IF PRINTING FOOTER ONLY (unique 2/3+3/3)
         else if (type == "footer")
         {
             // 2/3 of Invoice
@@ -187,15 +197,12 @@ public:
                 << setw(toEndOfThird2 - (padding.size() / 2))
                 << setfill(' ')
                 << " ";
-        }
-        // IF PRINTING HEADING OR FOOTER (the same 3/3)
-        if ((type == "headings") || (type == "footer"))
-        {
             // 3/3 of Invoice
+            cout.precision(2);
             cout
                 << setw(centerOfOneThird + (0.5 * price.size()))
                 << setfill(' ')
-                << cost;
+                << stof(cost);
             cout
                 << setw(toEndOfThird3 + padding.size() + 2)
                 << setfill(' ')
