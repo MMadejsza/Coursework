@@ -418,7 +418,7 @@ string validation(string typo, string msg)
     // specify validation rules in regex based on given argument "typo"
     if (typo == "name")
     {
-        regCondition = "[A-Za-z]+";
+        regCondition = "[A-Za-z ]+";
         errorMsg = "Please input the name - at least 1 letter - no numbers or special characters.";
     }
     // regex simplified: 2 digits 0-9 per slash -> validates only format, not if date is out of range
