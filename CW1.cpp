@@ -79,45 +79,22 @@ public:
         // assign result to Cart:
         netCost = cartNetValue;
     };
-
+    // VAT calculations:
     float calcVat()
     {
         VAT = round(netCost * vatValue * 100) / 100;
     };
-
+    // gross cost calculations:
     float calcGross()
     {
         grossCost = round((netCost + VAT) * 100) / 100;
     };
+    // invoice printer:
 
-    void printFooter(string header, string paddings, int width, float VAT, float grossCost, float netCost)
+    void tripleLine(string type, string itemText, string qty, string price, string cost, int width, string padding, string header)
     {
-        centeredLine(" ", width, paddings, header);
-        centeredLine("TOTAL:", width, paddings, header);
-        tripleLine("footer", "TOTAL NET:", " ", "", to_string(netCost), width, paddings, header);
-        tripleLine("footer", "VAT:", " ", "", to_string(VAT), width, paddings, header);
-        tripleLine("footer", "TOTAL INC. VAT:", " ", "", to_string(grossCost), width, paddings, header);
-        centeredLine(" ", width, paddings, header);
-        centeredLine(header, width, paddings, header);
-    }
-
-    // Prints center section - center header + list of items:
-    void printItems(string header, string paddings, int width, vector<Product> products)
-    {
-        vector<string> headings{"ITEM:", "QTY x PRICE:", "COST:"};
+        // assign upper readability to specific meaning variable
         int toEndOfHeaderDist = width;
-
-        tripleLine("headings", headings[0], headings[1], "", headings[2], toEndOfHeaderDist, paddings, header);
-        centeredLine(" ", width, paddings, header);
-
-        for (int i = 0; i < products.size(); i++)
-        {
-            tripleLine("products", products[i].name, to_string(products[i].quantity), to_string(products[i].price), to_string(products[i].totalNet), toEndOfHeaderDist, paddings, header);
-        }
-    }
-
-    void tripleLine(string type, string text, string text2, string text3, string text4, int toEndOfHeaderDist, string padding, string header)
-    {
         // Calculations - everything is aligned to right
         // Entire invoice width is previous double distance to the end of text - this text because it's symmetric. We add 1 padding because we don't set its field at the end of line
         int entireWidth = toEndOfHeaderDist + (toEndOfHeaderDist - header.size() + 2 * padding.size());
@@ -126,14 +103,15 @@ public:
         // center of 1/3 Width: (it's width of field ending at the center remembering about alignment to right)
         int centerOfOneThird = oneThirdOfInvoice / 2;
         // moving by text half to center it
-        int centeredThirdText = centerOfOneThird + (0.5 * text.size());
-        int centeredThirdText2 = centerOfOneThird + (0.5 * text2.size());
-        int centeredThirdText3 = centerOfOneThird + (0.5 * text3.size());
+        int centeredThirdText = centerOfOneThird + (0.5 * itemText.size());
+        int centeredThirdText2 = centerOfOneThird + (0.5 * qty.size());
+        int centeredThirdText3 = centerOfOneThird + (0.5 * price.size());
         // rest to fill up as 1/3 - width to the end of text -1 for ending with space " "
         int toEndOfThird = oneThirdOfInvoice - centeredThirdText - 1;
         int toEndOfThird2 = oneThirdOfInvoice - centeredThirdText2 - 1;
         int toEndOfThird3 = oneThirdOfInvoice - centeredThirdText3 - 1;
 
+        // if headings
         if (type == "headings")
         {
             // 1/3 of Invoice
@@ -142,27 +120,27 @@ public:
                 << setw(padding.size())
                 << padding;
             cout
-                << setw(centerOfOneThird + (0.5 * text.size()))
+                << setw(centerOfOneThird + (0.5 * itemText.size()))
                 << setfill(' ')
-                << text;
+                << itemText;
             cout
                 << setw(toEndOfThird - (padding.size() / 2))
                 << setfill(' ')
                 << " ";
             // 1/3 of Invoice
             cout
-                << setw(centerOfOneThird + (0.5 * text2.size()))
+                << setw(centerOfOneThird + (0.5 * qty.size()))
                 << setfill(' ')
-                << text2;
+                << qty;
             cout
                 << setw(toEndOfThird2 - (padding.size() / 2))
                 << setfill(' ')
                 << " ";
             // 1/3 of Invoice
             cout
-                << setw(centerOfOneThird + (0.5 * text3.size()))
+                << setw(centerOfOneThird + (0.5 * price.size()))
                 << setfill(' ')
-                << text4;
+                << cost;
             cout
                 << setw(toEndOfThird3 + padding.size() + 2)
                 << setfill(' ')
@@ -178,7 +156,7 @@ public:
             cout
                 << setw(oneThirdOfInvoice - padding.size())
                 << setfill(' ')
-                << text;
+                << itemText;
             cout
                 << setw(1)
                 << setfill(' ')
@@ -187,9 +165,9 @@ public:
             // manual aligning (numbers):
             cout.precision(2);
             cout
-                << setw(centerOfOneThird - (0.5 * (text2 + " x " + "  ").size()))
+                << setw(centerOfOneThird - (0.5 * (qty + " x " + "  ").size()))
                 << setfill(' ') << fixed
-                << text2 << " x " << stof(text3);
+                << qty << " x " << stof(price);
             cout
                 << setw(toEndOfThird2 - 5)
                 << setfill(' ')
@@ -199,7 +177,7 @@ public:
             cout
                 << setw(centerOfOneThird)
                 << setfill(' ') << fixed
-                << stof(text4);
+                << stof(cost);
             cout
                 << setw(toEndOfThird3 + padding.size() + 6)
                 << setfill(' ')
@@ -216,16 +194,16 @@ public:
             cout
                 << setw(oneThirdOfInvoice - padding.size())
                 << setfill(' ')
-                << text;
+                << itemText;
             cout
                 << setw(1)
                 << setfill(' ')
                 << " ";
             // 1/3 of Invoice
             cout
-                << setw(centerOfOneThird + (0.5 * text2.size()))
+                << setw(centerOfOneThird + (0.5 * qty.size()))
                 << setfill(' ')
-                << text2;
+                << qty;
             cout
                 << setw(toEndOfThird2 - (padding.size() / 2))
                 << setfill(' ')
@@ -233,9 +211,9 @@ public:
             // 1/3 of Invoice
             cout.precision(2);
             cout
-                << setw(centerOfOneThird + (0.5 * text3.size()))
+                << setw(centerOfOneThird + (0.5 * price.size()))
                 << setfill(' ') << fixed
-                << stof(text4);
+                << stof(cost);
             cout
                 << setw(toEndOfThird3 + padding.size() + 2)
                 << setfill(' ')
@@ -243,8 +221,10 @@ public:
         }
     }
 
-    void centeredLine(string text, int toEndOfHeaderDist, string padding, string header)
+    void centeredLine(string text, int width, string padding, string header)
     {
+        // assign upper readability to specific meaning variable
+        int toEndOfHeaderDist = width;
         // Calculations - everything is aligned to right
         // Width of field ending in the center of Header Text, "toEndOfHeaderDist" is initial value which we treat as width of invoice.
         int distToCenterOfHeader = toEndOfHeaderDist - (header.size() / 2);
@@ -264,16 +244,18 @@ public:
             endOfTextToEnd = entireWidth - toEndOfCenteredTextDist;
         };
 
-        // If we center actual header of Invoice we change filling characters:
+        cout // field for padding only because we want to keep default right align but stil start from specific padding
+            << setw(padding.size())
+            << padding;
+        // If we center actual header of Invoice we change filling characters (couldn'y be done with function swapping char):
         if (text == header)
         {
-            cout // field for padding only because we want to keep default right align but stil start from specific padding
-                << setw(padding.size())
-                << padding;
+            // First column to the end of the text:
             cout
                 << setw(distToCenterOfHeader + (0.5 * text.size()))
                 << setfill('*')
                 << text;
+            // Second column from the end of the text:
             cout
                 << setw(endOfTextToEnd)
                 << setfill('*')
@@ -282,10 +264,6 @@ public:
         }
         else
         {
-
-            cout
-                << setw(padding.size())
-                << padding;
             cout
                 << setw(distToCenterOfHeader + (0.5 * text.size()))
                 << setfill(' ')
@@ -297,24 +275,52 @@ public:
                 << endl;
         }
     }
-
-    // Prints Header section - "Invoice + customer details"
-    void printHeader(string header, string padding, int length, Customer c)
+    // Prints bottom  section - summary with vVAT:
+    void printFooter(string header, string paddings, int width, float VAT, float grossCost, float netCost)
     {
-        int toEndOfHeaderDist = length;
         // Print invoice elements using specific functions:
-        centeredLine(header, toEndOfHeaderDist, padding, header);
-        centeredLine(" ", toEndOfHeaderDist, padding, header);
-        centeredLine("CUSTOMER:", toEndOfHeaderDist, padding, header);
-        centeredLine(c.name, toEndOfHeaderDist, padding, header);
-        centeredLine(c.address, toEndOfHeaderDist, padding, header);
-        centeredLine(c.postcode, toEndOfHeaderDist, padding, header);
-        centeredLine(c.cardNumber, toEndOfHeaderDist, padding, header);
-        centeredLine(c.expiryDate, toEndOfHeaderDist, padding, header);
-        centeredLine(c.secretCode, toEndOfHeaderDist, padding, header);
-        centeredLine(" ", toEndOfHeaderDist, padding, header);
+        centeredLine(" ", width, paddings, header);
+        centeredLine("TOTAL:", width, paddings, header);
+        // (empty strings swap "product quantity" and "product price"):
+        tripleLine("footer", "TOTAL NET:", " ", "", to_string(netCost), width, paddings, header);
+        tripleLine("footer", "VAT:", " ", "", to_string(VAT), width, paddings, header);
+        tripleLine("footer", "TOTAL INC. VAT:", " ", "", to_string(grossCost), width, paddings, header);
+        centeredLine(" ", width, paddings, header);
+        centeredLine(header, width, paddings, header);
     }
 
+    // Prints center section - center header + list of items:
+    void printItems(string header, string paddings, int width, vector<Product> products)
+    {
+        // Define heading for each column:
+        vector<string> headings{"ITEM:", "QTY x PRICE:", "COST:"};
+        // Print header using support function (empty string swaps "product price"):
+        tripleLine("headings", headings[0], headings[1], "", headings[2], width, paddings, header);
+        centeredLine(" ", width, paddings, header);
+        // Print out products from cart using support function
+        for (int i = 0; i < products.size(); i++)
+        {
+            // string conversion only to let it be universal for headings and products printing - utilized within function
+            tripleLine("products", products[i].name, to_string(products[i].quantity), to_string(products[i].price), to_string(products[i].totalNet), width, paddings, header);
+        }
+    }
+
+    // Prints Header section - "Invoice + customer details"
+    void printHeader(string header, string padding, int width, Customer c)
+    {
+        // Print invoice elements using specific functions:
+        centeredLine(header, width, padding, header);
+        centeredLine(" ", width, padding, header);
+        centeredLine("CUSTOMER:", width, padding, header);
+        centeredLine(c.name, width, padding, header);
+        centeredLine(c.address, width, padding, header);
+        centeredLine(c.postcode, width, padding, header);
+        centeredLine(c.cardNumber, width, padding, header);
+        centeredLine(c.expiryDate, width, padding, header);
+        centeredLine(c.secretCode, width, padding, header);
+        centeredLine(" ", width, padding, header);
+    }
+    // Invoice printer:
     void printInvoice()
     {
         // Describe invoice
@@ -334,7 +340,9 @@ public:
     // constructor - "creation template"
     Cart(vector<Product> productsVector, vector<Customer> ownerVector)
     {
+        // assign received vector with products
         ownerDetails = ownerVector;
+        // assign customer object wrapped in vector
         products = productsVector;
         // call straight away when instantiating:
         calcNet();
@@ -376,15 +384,17 @@ int productQty(string msg)
 // function grouping product data related inputs
 Cart productsForm(Customer Cust)
 {
-    // int beans = productQty("Enter Baked Beans units to buy.");
-    // int popcorn = productQty("Enter Popcorn units to buy.");
-    // int milk = productQty("Enter Evaporated Milk units to buy.");
-    // int bread = productQty("Enter Bread units to buy.");
+    // Collect data about quantity using validation function:
+    int beans = productQty("Enter Baked Beans units to buy.");
+    int popcorn = productQty("Enter Popcorn units to buy.");
+    int milk = productQty("Enter Evaporated Milk units to buy.");
+    int bread = productQty("Enter Bread units to buy.");
 
-    int beans = 3;
-    int popcorn = 3;
-    int milk = 3;
-    int bread = 3;
+    // Dummy data to test invoice printing:
+    // int beans = 3;
+    // int popcorn = 3;
+    // int milk = 3;
+    // int bread = 3;
 
     // instantiate objects for each product:
     Product Beans("Baked Beans", 1.20, beans);
@@ -394,20 +404,19 @@ Cart productsForm(Customer Cust)
 
     // declare container of products:
     vector<Product> productsVector;
-    // push products into it:
+    // insert many products into it:
     productsVector.insert(productsVector.end(), {Beans, Popcorn, Milk, Bread});
-    // productsVector.push_back(Popcorn);
-    // productsVector.push_back(Milk);
-    // productsVector.push_back(Bread);
+    // declare container customer object (way around for declaring object in foreign class):
     vector<Customer> ownerDetailsVector;
     ownerDetailsVector.push_back(Cust);
 
-    // instantiate Cart with product and assign it to customer:
+    // instantiate Cart with products and assign it to customer:
     Cart Cart1(productsVector, ownerDetailsVector);
     return Cart1;
 }
 
 // function validating expected input type "typo" and according message:
+// (type of  expected datum, instruction for users)
 string validation(string typo, string msg)
 {
     // declaring the variables:
@@ -440,6 +449,7 @@ string validation(string typo, string msg)
         errorMsg = "Card number must contain 16 digits.";
     };
 
+    // if we require validation:
     if (typo != "none")
     {
         // instantiate regex
@@ -459,13 +469,15 @@ string validation(string typo, string msg)
             // request the input to "datum" again
             getline(cin >> ws, datum);
         } while (!regex_match(datum, reg));
+        // transform to upper case:
         transform(datum.begin(), datum.end(), datum.begin(), ::toupper);
         return datum;
     }
-
+    // if we do NOT require validation:
     cout << msg << endl;
     // request the input allowing whitespaces
     getline(cin >> ws, datum);
+    // transform to upper case:
     transform(datum.begin(), datum.end(), datum.begin(), ::toupper);
     return datum;
 };
@@ -473,22 +485,24 @@ string validation(string typo, string msg)
 // function grouping customer data related inputs
 auto customerInputForm()
 {
-    string name = validation("name", "Enter a name (No special characters or numbers): ");
-    string address = validation("none", "Enter 1st line of the address");
-    string postcode = validation("postcode", "Enter postcode in format (XXX(x) XXX)");
-    string cardNumber = validation("card", "Enter 16-digit card number");
-    string expiryDate = validation("date", "Enter the expiry date (DD/MM/YY format) ");
-    string secretCode = validation("none", "Enter your secret code");
+    // Collect data using validation function:
+    // string name = validation("name", "Enter a name (No special characters or numbers): ");
+    // string address = validation("none", "Enter 1st line of the address");
+    // string postcode = validation("postcode", "Enter postcode in format (XXX(x) XXX)");
+    // string cardNumber = validation("card", "Enter 16-digit card number");
+    // string expiryDate = validation("date", "Enter the expiry date (DD/MM/YY format) ");
+    // string secretCode = validation("none", "Enter your secret code");
 
-    // string name = "Maciej Madejsza";
-    // string address = "6 Magpie way";
-    // string postcode = "RG31 4SJ";
-    // string cardNumber = "1111 2222 3333 4444";
-    // string expiryDate = "12/12/12";
-    // string secretCode = "SecretCode";
+    // Dummy data for testing without validation:
+    string name = "Maciej Madejsza";
+    string address = "6 Magpie way";
+    string postcode = "RG31 4SJ";
+    string cardNumber = "1111 2222 3333 4444";
+    string expiryDate = "12/12/12";
+    string secretCode = "SecretCode";
 
+    // create object customer based on collected data
     Customer Customer1(name, address, postcode, cardNumber, expiryDate, secretCode);
-
     return Customer1;
 };
 
@@ -496,7 +510,7 @@ int main()
 {
     // customerInputForm returning Customer object;
     auto Customer1 = customerInputForm();
-    // productsForm returning Cart object signed by Customer;
+    // productsForm returning Cart object signed by Customer into argument;
     auto Cart1 = productsForm(Customer1);
     // print output:
     Cart1.printInvoice();
