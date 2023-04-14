@@ -89,8 +89,9 @@ public:
     {
         grossCost = round((netCost + VAT) * 100) / 100;
     };
-    // invoice printer:
 
+    // PRINTING------------------------------------------------------------
+    //  Prints 3-column line
     void tripleLine(string type, string itemText, string qty, string price, string cost, int width, string padding, string header)
     {
         // assign upper readability to specific meaning variable
@@ -201,7 +202,7 @@ public:
                 << padding << endl;
         }
     }
-
+    // Prints 2-column line / centered text
     void centeredLine(string text, int width, string padding, string header)
     {
         // assign upper readability to specific meaning variable
@@ -269,7 +270,6 @@ public:
         centeredLine(" ", width, paddings, header);
         centeredLine(header, width, paddings, header);
     }
-
     // Prints center section - center header + list of items:
     void printItems(string header, string paddings, int width, vector<Product> products)
     {
@@ -285,7 +285,6 @@ public:
             tripleLine("products", products[i].name, to_string(products[i].quantity), to_string(products[i].price), to_string(products[i].totalNet), width, paddings, header);
         }
     }
-
     // Prints Header section - "Invoice + customer details"
     void printHeader(string header, string padding, int width, Customer c)
     {
@@ -317,8 +316,8 @@ public:
         // Print summary in footer
         printFooter(header, paddings, width, VAT, grossCost, netCost);
     }
-
-    // constructor - "creation template"
+    // PRINTING END------------------------------------------------------------
+    //  constructor - "creation template"
     Cart(vector<Product> productsVector, vector<Customer> ownerVector)
     {
         // assign received vector with products
