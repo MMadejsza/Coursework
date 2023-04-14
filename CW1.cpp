@@ -93,9 +93,9 @@ public:
     {
         centeredLine(" ", width, paddings, header);
         centeredLine("TOTAL:", width, paddings, header);
-        tripleLine("footer", "Total net:", " ", "", to_string(netCost), width, paddings, header);
+        tripleLine("footer", "TOTAL NET:", " ", "", to_string(netCost), width, paddings, header);
         tripleLine("footer", "VAT:", " ", "", to_string(VAT), width, paddings, header);
-        tripleLine("footer", "Total inc. VAT:", " ", "", to_string(grossCost), width, paddings, header);
+        tripleLine("footer", "TOTAL INC. VAT:", " ", "", to_string(grossCost), width, paddings, header);
         centeredLine(" ", width, paddings, header);
         centeredLine(header, width, paddings, header);
     }
@@ -304,7 +304,7 @@ public:
         // Print invoice elements using specific functions:
         centeredLine(header, toEndOfHeaderDist, padding, header);
         centeredLine(" ", toEndOfHeaderDist, padding, header);
-        centeredLine("Customer:", toEndOfHeaderDist, padding, header);
+        centeredLine("CUSTOMER:", toEndOfHeaderDist, padding, header);
         centeredLine(c.name, toEndOfHeaderDist, padding, header);
         centeredLine(c.address, toEndOfHeaderDist, padding, header);
         centeredLine(c.postcode, toEndOfHeaderDist, padding, header);
