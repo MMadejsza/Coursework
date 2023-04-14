@@ -98,19 +98,24 @@ public:
         int toEndOfHeaderDist = width;
         // Calculations - everything is aligned to right
         // Entire invoice width is previous double distance to the end of text - this text because it's symmetric. We add 1 padding because we don't set its field at the end of line
-        int entireWidth = toEndOfHeaderDist + (toEndOfHeaderDist - header.size() + 2 * padding.size());
+        int entireWidth = padding.size() + toEndOfHeaderDist + (toEndOfHeaderDist - header.size()) + padding.size();
         // 1/3 Width:
-        int oneThirdOfInvoice = (entireWidth - padding.size()) / 3;
+        int oneThirdOfInvoice = (entireWidth - 2 * padding.size()) / 3;
         // center of 1/3 Width: (it's width of field ending at the center remembering about alignment to right)
         int centerOfOneThird = oneThirdOfInvoice / 2;
         // moving by text half to center it
         int centeredThirdText = centerOfOneThird + (0.5 * itemText.size());
-        int centeredThirdText2 = centerOfOneThird + (0.5 * qty.size());
-        int centeredThirdText3 = centerOfOneThird + (0.5 * price.size());
+        int centeredThirdQty = centerOfOneThird + (0.5 * qty.size());
+        int centeredThirdPrice = centerOfOneThird + (0.5 * (0.5 * price.size()));
+        int centeredThirdQP = centerOfOneThird + (0.5 * ((qty + " x ").size()));
+        int centeredThirdCost = centerOfOneThird + (0.5 * cost.size());
         // rest to fill up as 1/3 - width to the end of text -1 for ending with space " "
-        int toEndOfThird = oneThirdOfInvoice - centeredThirdText - 1;
-        int toEndOfThird2 = oneThirdOfInvoice - centeredThirdText2 - 1;
-        int toEndOfThird3 = oneThirdOfInvoice - centeredThirdText3 - 1;
+        int toEndOfThird = oneThirdOfInvoice - centeredThirdText + 1;
+        int toEndOfThirdQty = oneThirdOfInvoice - centeredThirdQty;
+        int toEndOfThirdPrice = oneThirdOfInvoice - centeredThirdPrice;
+        // 4 is number of following 0s to cut when price is a string
+        int toEndOfThirdQP = oneThirdOfInvoice - (centeredThirdQP + price.size() - 5);
+        int toEndOfThirdCost = oneThirdOfInvoice - centeredThirdCost + padding.size() - 1;
         // PADDING START EVERYWHERE
         cout
             << setw(padding.size())
@@ -120,30 +125,30 @@ public:
         {
             // 1/3 of Invoice
             cout
-                << setw(centerOfOneThird + (0.5 * itemText.size()))
+                << setw(centeredThirdText)
                 << setfill(' ')
                 << itemText;
             cout
-                << setw(toEndOfThird - (padding.size() / 2))
+                << setw(toEndOfThird)
                 << setfill(' ')
                 << " ";
             // 2/3 of Invoice
             cout
-                << setw(centerOfOneThird + (0.5 * qty.size()))
+                << setw(centeredThirdQty)
                 << setfill(' ')
                 << qty;
             cout
-                << setw(toEndOfThird2 - (padding.size() / 2))
+                << setw(toEndOfThirdQty)
                 << setfill(' ')
                 << " ";
             // 3/3 of Invoice
             cout.precision(2);
             cout
-                << setw(centerOfOneThird + (0.5 * price.size()))
+                << setw(centeredThirdCost)
                 << setfill(' ')
                 << cost;
             cout
-                << setw(toEndOfThird3 + padding.size() + 2)
+                << setw(toEndOfThirdCost)
                 << setfill(' ')
                 << padding << endl;
         }
@@ -152,7 +157,7 @@ public:
         {
             // 1/3 of Invoice
             cout
-                << setw(oneThirdOfInvoice - padding.size())
+                << setw(oneThirdOfInvoice)
                 << setfill(' ')
                 << itemText;
             cout
@@ -167,21 +172,22 @@ public:
             // manual aligning (numbers):
             cout.precision(2);
             cout
-                << setw(centerOfOneThird - (0.5 * (qty + " x " + "  ").size()))
+                << setw(centerOfOneThird)
                 << setfill(' ') << fixed
-                << qty << " x " << stof(price);
+                << qty + " x " << stof(price);
             cout
-                << setw(toEndOfThird2 - 5)
+                << setw(centerOfOneThird - price.size() + 5)
                 << setfill(' ')
                 << " ";
             // 3/3 of Invoice
             cout.precision(2);
             cout
-                << setw(centerOfOneThird)
+                // align center by dot
+                << setw(centerOfOneThird + 3)
                 << setfill(' ') << fixed
                 << stof(cost);
             cout
-                << setw(toEndOfThird3 + padding.size() + 6)
+                << setw(centerOfOneThird)
                 << setfill(' ')
                 << padding << endl;
         }
@@ -190,21 +196,17 @@ public:
         {
             // 2/3 of Invoice
             cout
-                << setw(centerOfOneThird + (0.5 * qty.size()))
-                << setfill(' ')
-                << qty;
-            cout
-                << setw(toEndOfThird2 - (padding.size() / 2))
+                << setw(oneThirdOfInvoice)
                 << setfill(' ')
                 << " ";
             // 3/3 of Invoice
             cout.precision(2);
             cout
-                << setw(centerOfOneThird + (0.5 * price.size()))
+                << setw(centerOfOneThird + 3)
                 << setfill(' ')
                 << stof(cost);
             cout
-                << setw(toEndOfThird3 + padding.size() + 2)
+                << setw(centerOfOneThird)
                 << setfill(' ')
                 << padding << endl;
         }
@@ -271,9 +273,9 @@ public:
         centeredLine(" ", width, paddings, header);
         centeredLine("TOTAL:", width, paddings, header);
         // (empty strings swap "product quantity" and "product price"):
-        tripleLine("footer", "TOTAL NET:", " ", "", to_string(netCost), width, paddings, header);
-        tripleLine("footer", "VAT:", " ", "", to_string(VAT), width, paddings, header);
-        tripleLine("footer", "TOTAL INC. VAT:", " ", "", to_string(grossCost), width, paddings, header);
+        tripleLine("footer", "TOTAL NET:", "", "", to_string(netCost), width, paddings, header);
+        tripleLine("footer", "VAT:", "", "", to_string(VAT), width, paddings, header);
+        tripleLine("footer", "TOTAL INC. VAT:", "", "", to_string(grossCost), width, paddings, header);
         centeredLine(" ", width, paddings, header);
         centeredLine(header, width, paddings, header);
     }
@@ -281,7 +283,7 @@ public:
     void printItems(string header, string paddings, int width, vector<Product> products)
     {
         // Define heading for each column:
-        vector<string> headings{"ITEM:", "QTY x PRICE:", "COST:"};
+        vector<string> headings{"ITEMS:", "QTY x PRICE:", "COST:"};
         // Print header using support function (empty string swaps "product price"):
         tripleLine("headings", headings[0], headings[1], "", headings[2], width, paddings, header);
         centeredLine(" ", width, paddings, header);
@@ -316,12 +318,14 @@ public:
         int width = 33;
         Customer c = ownerDetails[0];
 
+        cout << endl;
         // Print the invoice header
         printHeader(header, paddings, width, c);
         // Print all bought items
         printItems(header, paddings, width, products);
         // Print summary in footer
         printFooter(header, paddings, width, VAT, grossCost, netCost);
+        cout << endl;
     }
     // PRINTING END------------------------------------------------------------
     //  constructor - "creation template"
@@ -378,10 +382,10 @@ Cart productsForm(Customer Cust)
     int bread = productQty("Enter Bread units to buy.");
 
     // Dummy data to test invoice printing:
-    // int beans = 3;
-    // int popcorn = 3;
-    // int milk = 3;
-    // int bread = 3;
+    // int beans = 1;
+    // int popcorn = 1;
+    // int milk = 1;
+    // int bread = 1;
 
     // instantiate objects for each product:
     Product Beans("Baked Beans", 1.20, beans);
@@ -473,20 +477,20 @@ string validation(string typo, string msg)
 auto customerInputForm()
 {
     // Collect data using validation function:
-    // string name = validation("name", "Enter a name (No special characters or numbers): ");
-    // string address = validation("none", "Enter 1st line of the address");
-    // string postcode = validation("postcode", "Enter postcode in format (XXX(x) XXX)");
-    // string cardNumber = validation("card", "Enter 16-digit card number");
-    // string expiryDate = validation("date", "Enter the expiry date (DD/MM/YY format) ");
-    // string secretCode = validation("none", "Enter your secret code");
+    string name = validation("name", "Enter a name (No special characters or numbers): ");
+    string address = validation("none", "Enter 1st line of the address");
+    string postcode = validation("postcode", "Enter postcode in format (XXX(x) XXX)");
+    string cardNumber = validation("card", "Enter 16-digit card number");
+    string expiryDate = validation("date", "Enter the expiry date (DD/MM/YY format) ");
+    string secretCode = validation("none", "Enter your secret code");
 
     // Dummy data for testing without validation:
-    string name = "Maciej Madejsza";
-    string address = "6 Magpie way";
-    string postcode = "RG31 4SJ";
-    string cardNumber = "1111 2222 3333 4444";
-    string expiryDate = "12/12/12";
-    string secretCode = "SecretCode";
+    // string name = "Maciej Madejsza";
+    // string address = "6 Magpie way";
+    // string postcode = "RG31 4SJ";
+    // string cardNumber = "1111 2222 3333 4444";
+    // string expiryDate = "12/12/12";
+    // string secretCode = "SecretCode";
 
     // create object customer based on collected data
     Customer Customer1(name, address, postcode, cardNumber, expiryDate, secretCode);
