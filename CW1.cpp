@@ -80,12 +80,12 @@ public:
         netCost = cartNetValue;
     };
     // VAT calculations:
-    float calcVat()
+    void calcVat()
     {
         VAT = round(netCost * vatValue * 100) / 100;
     };
     // gross cost calculations:
-    float calcGross()
+    void calcGross()
     {
         grossCost = round((netCost + VAT) * 100) / 100;
     };
