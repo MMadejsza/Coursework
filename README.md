@@ -41,3 +41,6 @@ public:
     vector<Product> products;
 [...]
 ```
+
+
+no solution for error measeage in while loop
