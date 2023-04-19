@@ -20,7 +20,7 @@ public:
 
 
 ### :x: *Defining foreign object as an attribute of already existing one*
-- :white_check_mark: Like in JavaScript, I could assign foreign Objects and all their properties, in C++ I didn't find a short straightforward solution. That's why I wrapped the object in <vactor>
+- :white_check_mark: Like in JavaScript, I could assign foreign Objects and all their properties, in C++ I didn't find a short straightforward solution. That's why I wrapped the object in vectors
 - JS [Project](https://github.com/MMadejsza/JS_OOP_Project-Slot_Machine/blob/master/Game.js):
 ```
 class Game {
