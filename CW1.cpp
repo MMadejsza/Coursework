@@ -4,7 +4,7 @@
 #include <vector>    //vectors
 #include <cmath>     //rounding calculations
 #include <iomanip>   //printing invoice
-#include <algorithm> //transform
+#include <algorithm> //transform to uppercase
 using namespace std;
 
 // creating Product class / template to store collected data of each product
@@ -474,7 +474,7 @@ string validation(string typo, string msg)
 };
 
 // function grouping customer data related inputs
-auto customerInputForm()
+Customer customerInputForm()
 {
     // Collect data using validation function:
     string name = validation("name", "Enter a name (No special characters or numbers): ");
