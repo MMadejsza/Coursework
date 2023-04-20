@@ -238,7 +238,7 @@ public:
         cout // field for padding only because we want to keep default right align but stil start from specific padding
             << setw(padding.size())
             << padding;
-        // If we center actual header of Invoice we change filling characters (couldn'y be done with function swapping char):
+        // If we center actual header of Invoice we change filling characters (couldn't be done with function swapping char):
         if (text == header)
         {
             // First column to the end of the text:
