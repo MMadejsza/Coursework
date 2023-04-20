@@ -380,16 +380,16 @@ int productQty(string msg)
 Cart productsForm(Customer Cust)
 {
     // Collect data about quantity using validation function:
-    // int beans = productQty("Enter Baked Beans units to buy.");
-    // int popcorn = productQty("Enter Popcorn units to buy.");
-    // int milk = productQty("Enter Evaporated Milk units to buy.");
-    // int bread = productQty("Enter Bread units to buy.");
+    int beans = productQty("Enter Baked Beans units to buy.");
+    int popcorn = productQty("Enter Popcorn units to buy.");
+    int milk = productQty("Enter Evaporated Milk units to buy.");
+    int bread = productQty("Enter Bread units to buy.");
 
     // Dummy data to test invoice printing:
-    int beans = 123;
-    int popcorn = 112;
-    int milk = 12;
-    int bread = 4;
+    // int beans = 123;
+    // int popcorn = 112;
+    // int milk = 12;
+    // int bread = 4;
 
     // instantiate objects for each product:
     Product Beans("Baked Beans", 1.20, beans);
@@ -481,20 +481,20 @@ string validation(string typo, string msg)
 Customer customerInputForm()
 {
     // Collect data using validation function:
-    // string name = validation("name", "Enter a name (No special characters or numbers): ");
-    // string address = validation("none", "Enter 1st line of the address");
-    // string postcode = validation("postcode", "Enter postcode in format (XXX(x) XXX)");
-    // string cardNumber = validation("card", "Enter 16-digit card number");
-    // string expiryDate = validation("date", "Enter the expiry date (DD/MM/YY format) ");
-    // string secretCode = validation("none", "Enter your secret code");
+    string name = validation("name", "Enter a name (No special characters or numbers): ");
+    string address = validation("none", "Enter 1st line of the address");
+    string postcode = validation("postcode", "Enter postcode in format (XXX(x) XXX)");
+    string cardNumber = validation("card", "Enter 16-digit card number");
+    string expiryDate = validation("date", "Enter the expiry date (DD/MM/YY format) ");
+    string secretCode = validation("none", "Enter your secret code");
 
     // Dummy data for testing without validation:
-    string name = "Maciej Madejsza";
-    string address = "6 Magpie way";
-    string postcode = "RG31 4SJ";
-    string cardNumber = "1111 2222 3333 4444";
-    string expiryDate = "12/12/12";
-    string secretCode = "SecretCode";
+    // string name = "Maciej Madejsza";
+    // string address = "6 Magpie way";
+    // string postcode = "RG31 4SJ";
+    // string cardNumber = "1111 2222 3333 4444";
+    // string expiryDate = "12/12/12";
+    // string secretCode = "SecretCode";
 
     // create object customer based on collected data
     Customer Customer1(name, address, postcode, cardNumber, expiryDate, secretCode);
